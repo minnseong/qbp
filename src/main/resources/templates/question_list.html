@@ -7,7 +7,9 @@
     </thead>
     <tbody>
     <tr th:each="question : ${questions}">
-        <td th:text="${question.subject}"></td>
+        <td>
+            <a th:href="@{|/qbp/question/${question.id}|}" th:text="${question.title}"
+        </td>
         <td th:text="${question.createdAt}"></td>
     </tr>
     </tbody>

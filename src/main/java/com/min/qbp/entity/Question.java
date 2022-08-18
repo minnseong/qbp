@@ -18,7 +18,7 @@ public class Question {
     @Column(name = "QUESTION_ID")
     private Long id;
 
-    private String subject;
+    private String title;
     @Lob
     private String content;
     private LocalDateTime createdAt;
