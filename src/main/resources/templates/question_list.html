@@ -5,20 +5,22 @@
             <tr>
                 <th>번호</th>
                 <th>제목</th>
-                <th>작성일시</th>
+                <th>작성자</th>
                 <th>댓글수</th>
+                <th>작성일시</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="question, loop : ${questions}" th:onclick="|location.href='@{|/qbp/question/${question.id}|}'|">
                 <td th:text="${questions.getTotalElements - (questions.number * questions.size) - loop.index}"></td>
                 <td th:text="${question.title}"></td>
-                <td th:text="${#temporals.format(question.createdAt, 'yyyy-mm-dd &nbsp;&nbsp; HH:mm')}"></td>
+                <td><span th:if="${question.author != null}" th:text="${question.author.username}"></span></td>
                 <td>
                     <span class="text-danger small ms-2" th:if="${#lists.size(question.answers) > 0}"
                           th:text="${#lists.size(question.answers)}">
                     </span>
                 </td>
+                <td th:text="${#temporals.format(question.createdAt, 'yyyy-mm-dd &nbsp;&nbsp; HH:mm')}"></td>
             </tr>
             </tbody>
         </table>

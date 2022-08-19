@@ -1,6 +1,7 @@
 package com.min.qbp.service;
 
 import com.min.qbp.entity.Question;
+import com.min.qbp.entity.User;
 import com.min.qbp.exception.DataNotFoundException;
 import com.min.qbp.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +20,11 @@ public class QuestionService {
 
     private final QuestionRepository repository;
 
-    public Question save(String title, String content) {
+    public Question save(String title, String content, User author) {
         Question question = Question.builder()
                 .title(title)
                 .content(content)
+                .author(author)
                 .createdAt(LocalDateTime.now())
                 .build();
 

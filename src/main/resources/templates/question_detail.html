@@ -15,15 +15,14 @@
             th:text="|${#lists.size(question.answers)}개의 답변이 있습니다.|"></h5>
         <div class="card my-3 w-75 overflow-auto" th:each="answer : ${question.answers}">
             <div class="card-body" >
-                <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
-                <div class="d-flex justify-content-end">
-                    <div class="badge bg-light text-dark p-0 text-start">
-                        <div th:text="${#temporals.format(answer.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
-                    </div>
+                <div class="mb-3">
+                    <span class="fs-6 fw-bold me-2" th:if="${answer.author != null}" th:text="${answer.author.username}"></span>
+                    <span class="fs-6 fw-light float-end" th:text="${#temporals.format(answer.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
                 </div>
+                <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
             </div>
         </div>
-        <form th:action="@{|/qbp/answer/${question.id}|}" th:object="${answerForm}" method="post" class="my-3 w-75">
+        <form th:action="@{|/qbp/answer/${question.id}|}" sec:authorize="isAuthenticated()" th:object="${answerForm}" method="post" class="my-3 w-75">
             <textarea name="content" th:field="*{content}" th:errorclass="field-error" id="content" rows="5" class="form-control h-25"></textarea>
             <div th:if="${#fields.hasErrors('content')}" th:errorclass="field-error" th:errors="*{content}">
                 본문 오류
