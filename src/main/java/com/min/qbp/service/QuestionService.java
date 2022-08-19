@@ -4,6 +4,9 @@ import com.min.qbp.entity.Question;
 import com.min.qbp.exception.DataNotFoundException;
 import com.min.qbp.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,5 +43,10 @@ public class QuestionService {
 
     public List<Question> findAll() {
         return repository.findAll();
+    }
+
+    public Page<Question> findAllByPage(int page) {
+        Pageable pageable = PageRequest.of(page-1, 10);
+        return repository.findAll(pageable);
     }
 }

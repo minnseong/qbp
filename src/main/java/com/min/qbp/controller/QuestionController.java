@@ -5,6 +5,7 @@ import com.min.qbp.dto.form.QuestionForm;
 import com.min.qbp.entity.Question;
 import com.min.qbp.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,8 +39,10 @@ public class QuestionController {
     }
 
     @GetMapping("/question")
-    public String showQuestions(Model model) {
-        List<Question> questions = service.findAll();
+    public String showQuestions(Model model, @RequestParam(value="page", defaultValue = "1") int page) {
+//        List<Question> questions = service.findAll();
+//        model.addAttribute("questions", questions);
+        Page<Question> questions = service.findAllByPage(page);
         model.addAttribute("questions", questions);
         return "question_list";
     }

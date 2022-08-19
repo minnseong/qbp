@@ -6,16 +6,53 @@
                 <th>번호</th>
                 <th>제목</th>
                 <th>작성일시</th>
+                <th>댓글수</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="question, loop : ${questions}" th:onclick="|location.href='@{|/qbp/question/${question.id}|}'|">
-                <td th:text="${loop.count}"></td>
+                <td th:text="${questions.getTotalElements - (questions.number * questions.size) - loop.index}"></td>
                 <td th:text="${question.title}"></td>
                 <td th:text="${#temporals.format(question.createdAt, 'yyyy-mm-dd &nbsp;&nbsp; HH:mm')}"></td>
+                <td>
+                    <span class="text-danger small ms-2" th:if="${#lists.size(question.answers) > 0}"
+                          th:text="${#lists.size(question.answers)}">
+                    </span>
+                </td>
             </tr>
             </tbody>
         </table>
+        <div th:if="${!questions.isEmpty()}">
+            <ul class="pagination justify-content-center"
+                th:with="start=${T(java.lang.Math).floor(questions.number/10)*10 + 1},
+                        last=(${start + 9 < questions.totalPages ? start + 9 : questions.totalPages})">
+                    <li class="page-item">
+                        <a th:href="@{?page=1}" class="page-link">
+                            <span class="text-black">First</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${!questions.hasPrevious} ? 'disabled'">
+                        <a th:href="@{|?page=${questions.number}|}" class="page-link">
+                            <span class="text-black">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}"
+                        th:classappend="${page == questions.number+1} ? 'active'">
+                        <a th:text="${page}" class="page-link text-black" th:href="@{|?page=${page}|}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${!questions.hasNext} ? 'disabled'">
+                        <a th:href="@{|?page=${questions.number+2}|}" class="page-link">
+                            <span class="text-black">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a th:href="@{|?page=${questions.totalPages}|}" class="page-link">
+                            <span class="text-black">Last</span>
+                        </a>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
         <a th:href="@{/qbp/question/new}" class="float-end btn btn-info btn-sm my-2">질문 등록하기</a>
     </div>
 </html>
