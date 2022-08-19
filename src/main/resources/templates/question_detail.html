@@ -23,8 +23,11 @@
                 </div>
             </div>
         </div>
-        <form th:action="@{|/qbp/answer/${question.id}|}" method="post" class="my-3 w-75">
-            <textarea name="content" id="content" rows="10" class="form-control h-25"></textarea>
+        <form th:action="@{|/qbp/answer/${question.id}|}" th:object="${answerForm}" method="post" class="my-3 w-75">
+            <textarea name="content" th:field="*{content}" th:errorclass="field-error" id="content" rows="5" class="form-control h-25"></textarea>
+            <div th:if="${#fields.hasErrors('content')}" th:errorclass="field-error" th:errors="*{content}">
+                본문 오류
+            </div>
             <input type="submit" value="답변등록" class="float-end btn btn-info btn-sm my-2">
         </form>
     </div>

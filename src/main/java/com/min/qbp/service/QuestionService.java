@@ -6,6 +6,7 @@ import com.min.qbp.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,13 @@ public class QuestionService {
 
     private final QuestionRepository repository;
 
-    public Question save(Question question) {
+    public Question save(String title, String content) {
+        Question question = Question.builder()
+                .title(title)
+                .content(content)
+                .createdAt(LocalDateTime.now())
+                .build();
+
         return repository.save(question);
     }
 

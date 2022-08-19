@@ -16,10 +16,11 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
 
     public Answer save(String content, Question question) {
-        Answer answer = new Answer();
-        answer.setQuestion(question);
-        answer.setContent(content);
-        answer.setCreatedAt(LocalDateTime.now());
+        Answer answer = Answer.builder()
+                .content(content)
+                .question(question)
+                .createdAt(LocalDateTime.now())
+                .build();
 
         return answerRepository.save(answer);
     }
