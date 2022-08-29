@@ -31,6 +31,7 @@ public class QuestionController {
         model.addAttribute("questionForm", new QuestionForm());
         return "question_form";
     }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/question/new")
     public String createQuestion(@Validated @ModelAttribute QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
@@ -46,7 +47,7 @@ public class QuestionController {
     }
 
     @GetMapping("/question")
-    public String showQuestions(Model model, @RequestParam(value="page", defaultValue = "1") int page) {
+    public String showQuestions(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
 //        List<Question> questions = service.findAll();
 //        model.addAttribute("questions", questions);
         Page<Question> questions = questionService.findAllByPage(page);
@@ -60,5 +61,35 @@ public class QuestionController {
         model.addAttribute("question", question);
         model.addAttribute("answerForm", new AnswerForm());
         return "question_detail";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/question/edit/{id}")
+    public String showEditForm(@PathVariable Long id, @ModelAttribute QuestionForm questionForm) {
+        Question question = questionService.findById(id);
+
+        questionForm.setTitle(question.getContent());
+        questionForm.setContent(question.getContent());
+
+        return "question_form";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/question/edit/{id}")
+    public String editQuestion(@PathVariable Long id, @Validated @ModelAttribute QuestionForm questionForm,
+                               BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "question_form";
+        }
+        questionService.edit(id, questionForm.getTitle(), questionForm.getContent());
+        return "redirect:/qbp/question/" + id;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/question/delete/{id}")
+    public String deleteQuestion(@PathVariable Long id) {
+        questionService.delete(id);
+        return "redirect:/";
     }
 }

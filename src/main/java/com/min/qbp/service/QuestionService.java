@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,6 +30,19 @@ public class QuestionService {
                 .build();
 
         return repository.save(question);
+    }
+
+    @Transactional
+    public void edit(Long id, String title, String content) {
+        Question question = repository.findById(id).get();
+
+        question.setTitle(title);
+        question.setContent(content);
+        question.setModifiedAt(LocalDateTime.now());
+    }
+
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 
     public Question findById(Long id) {

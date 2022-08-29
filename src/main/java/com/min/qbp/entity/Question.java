@@ -24,6 +24,7 @@ public class Question {
     @Lob
     private String content;
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "question")
     private List<Answer> answers = new ArrayList<>();
