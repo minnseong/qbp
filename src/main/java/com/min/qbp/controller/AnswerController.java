@@ -1,6 +1,7 @@
 package com.min.qbp.controller;
 
 import com.min.qbp.dto.form.AnswerForm;
+import com.min.qbp.entity.Answer;
 import com.min.qbp.entity.Question;
 import com.min.qbp.entity.User;
 import com.min.qbp.service.AnswerService;
@@ -39,5 +40,34 @@ public class AnswerController {
         }
         answerService.save(answerForm.getContent(), question, author);
         return "redirect:/qbp/question/%s".formatted(QuestionId);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/answer/edit/{id}")
+    public String showEditForm(@PathVariable Long id, @ModelAttribute AnswerForm answerForm) {
+        Answer answer = answerService.findById(id);
+
+        answerForm.setContent(answer.getContent());
+        return "answer_form";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/answer/edit/{id}")
+    public String editAnswer(@PathVariable Long id, @Validated @ModelAttribute AnswerForm answerForm,
+                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "answer_form";
+        }
+        Answer answer = answerService.findById(id);
+        answerService.edit(id, answerForm.getContent());
+        return "redirect:/qbp/question/" + answer.getQuestion().getId();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/answer/delete/{id}")
+    public String deleteAnswer(@PathVariable Long id) {
+        Answer answer = answerService.findById(id);
+        answerService.delete(answer);
+        return "redirect:/qbp/question/" + answer.getQuestion().getId();
     }
 }

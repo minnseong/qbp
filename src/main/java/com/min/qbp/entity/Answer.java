@@ -25,6 +25,7 @@ public class Answer {
     @Lob
     private String content;
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
